@@ -1,17 +1,14 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { mockUsers } from '../data/users'; // ✅ Make sure this exists
 
-// 🔐 Define Auth Context Type
 interface AuthContextType {
   user: string | null;
   login: (email: string, password: string) => boolean;
   logout: () => void;
 }
 
-// ✅ Create context with correct type
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// ✅ Define props type for provider
 interface AuthProviderProps {
   children: ReactNode;
 }

@@ -20,9 +20,9 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<FeedPage />} /> {/* Feed page */}
-          <Route path="/signin" element={<SignInPage />} /> {/* Sign In */}
-          <Route path="/signup" element={<SignUpPage />} /> {/* Sign Up */}
+          <Route path="/" element={<FeedPage />} /> 
+          <Route path="/signin" element={<SignInPage />} /> 
+          <Route path="/signup" element={<SignUpPage />} /> 
           
           {/* Example protected route */}
           <Route
