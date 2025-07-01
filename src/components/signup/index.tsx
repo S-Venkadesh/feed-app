@@ -4,6 +4,8 @@ import { InputFieldComponent } from "../../widgets/inputfield";
 import { ButtonComponent } from "../../widgets/Button";
 import { LinkComponent } from "../../widgets/link";
 
+import { useNavigate } from 'react-router-dom';
+
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
 
@@ -65,9 +67,12 @@ function reducer(state, action) {
 }
 
 export function SignUpComponent() {
+    const navigate = useNavigate();
+
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
   const [reenteredPassword, setReenteredPassword] = useState("");
+  const [alreadyHaveAcc, setAlreadyHaveAcc] = useState(false);
 
   const [errorMessages, dispatchError] = useReducer(reducer, {
     ...defaultErrorState,
@@ -107,13 +112,21 @@ export function SignUpComponent() {
 
   function authenticateUser() {
     if (checkIsValidInput()) {
+      let isAlreadyHaveAcc = localStorage.getItem(emailOrUserName);
+      if(!isAlreadyHaveAcc){
       localStorage.setItem(
-        "authUser",
+        emailOrUserName,
         JSON.stringify({
           userName: emailOrUserName,
           password: password,
         })
       );
+
+      navigate('/'); 
+      }else {
+setAlreadyHaveAcc(true)
+      }
+
     }
   }
 
@@ -212,6 +225,7 @@ export function SignUpComponent() {
         onClick={() => authenticateUser()}
         label={"Sign up"}
       />
+      {alreadyHaveAcc ? <span className="errorText"> Alreasy this mail have account</span> : null}
     </CardComponent>
   );
 }

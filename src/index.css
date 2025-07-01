@@ -26,3 +26,9 @@ code {
   color: #858585;
   font-size: smaller;
 }
+
+.errorText {
+  font-size: small;
+  font-weight: 600;
+  color: rgb(255, 12, 12);
+}
