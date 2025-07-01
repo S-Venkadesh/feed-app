@@ -1,17 +1,23 @@
 .labelWrapper {
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 }
 
 .label {
-    font-size: small;
-    font-weight: 600;
+  font-size: small;
+  font-weight: 600;
 }
 
 .inputbox {
-   padding: 12px;
-   background-color: #f4f4f4;
-   border: none;
-   border-radius: 12px;
+  padding: 12px;
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 12px;
+}
+
+.errorText {
+  font-size: small;
+  font-weight: 600;
+  color: rgb(255, 12, 12);
 }
