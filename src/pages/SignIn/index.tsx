@@ -1,7 +1,14 @@
 import React from "react";
 
-export function SignInPage(){
-    return (
-        <div>SignIN page</div>
-    )
+import { SignInComponent } from "../../components/signin";
+
+import "./styles.css";
+
+
+export function SignInPage() {
+  return (
+    <div className="signInPageWrapper">
+      <SignInComponent />
+    </div>
+  );
 }

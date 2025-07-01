@@ -9,28 +9,22 @@ import { useNavigate } from "react-router-dom";
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
 
-const SIGNUP_FIELDS = {
+const SIGNIN_FIELDS = {
   EMAIL: "email",
   PASSWORD: "password",
-  REPEAT_PASSWORD: "repeatpassword",
 };
 
 const ERROR_MESSAGE = {
   EMAIL: "Enter valid email or user name",
   PASSWORD: "Password lengtth should greater than 6",
-  REPEAT_PASSWORD: "Repeat password should same as password",
 };
 
 const defaultErrorState = {
-  [SIGNUP_FIELDS.EMAIL]: {
+  [SIGNIN_FIELDS.EMAIL]: {
     isError: false,
     errorMsg: "",
   },
-  [SIGNUP_FIELDS.PASSWORD]: {
-    isError: false,
-    errorMsg: "",
-  },
-  [SIGNUP_FIELDS.REPEAT_PASSWORD]: {
+  [SIGNIN_FIELDS.PASSWORD]: {
     isError: false,
     errorMsg: "",
   },
@@ -38,24 +32,17 @@ const defaultErrorState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case SIGNUP_FIELDS.EMAIL:
+    case SIGNIN_FIELDS.EMAIL:
       return {
         ...state,
-        [SIGNUP_FIELDS.EMAIL]: {
+        [SIGNIN_FIELDS.EMAIL]: {
           ...action.value,
         },
       };
-    case SIGNUP_FIELDS.PASSWORD:
+    case SIGNIN_FIELDS.PASSWORD:
       return {
         ...state,
-        [SIGNUP_FIELDS.PASSWORD]: {
-          ...action.value,
-        },
-      };
-    case SIGNUP_FIELDS.REPEAT_PASSWORD:
-      return {
-        ...state,
-        [SIGNUP_FIELDS.REPEAT_PASSWORD]: {
+        [SIGNIN_FIELDS.PASSWORD]: {
           ...action.value,
         },
       };
@@ -66,13 +53,13 @@ function reducer(state, action) {
   }
 }
 
-export function SignUpComponent() {
+export function SignInComponent() {
   const navigate = useNavigate();
 
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
   const [reenteredPassword, setReenteredPassword] = useState("");
-  const [alreadyHaveAcc, setAlreadyHaveAcc] = useState(false);
+  const [haveAccount, setHaveAccount] = useState(true);
 
   const [errorMessages, dispatchError] = useReducer(reducer, {
     ...defaultErrorState,
@@ -84,7 +71,7 @@ export function SignUpComponent() {
     if (emailOrUserName.trim() === "") {
       isValid = false;
       dispatchError({
-        type: SIGNUP_FIELDS.EMAIL,
+        type: SIGNIN_FIELDS.EMAIL,
         value: { isError: true, errorMsg: ERROR_MESSAGE.EMAIL },
       });
     }
@@ -92,16 +79,8 @@ export function SignUpComponent() {
     if (password.trim().split("").length < 6) {
       isValid = false;
       dispatchError({
-        type: SIGNUP_FIELDS.PASSWORD,
+        type: SIGNIN_FIELDS.PASSWORD,
         value: { isError: true, errorMsg: ERROR_MESSAGE.PASSWORD },
-      });
-    }
-
-    if (reenteredPassword === "" || password !== reenteredPassword) {
-      isValid = false;
-      dispatchError({
-        type: SIGNUP_FIELDS.REPEAT_PASSWORD,
-        value: { isError: true, errorMsg: ERROR_MESSAGE.REPEAT_PASSWORD },
       });
     }
 
@@ -115,28 +94,21 @@ export function SignUpComponent() {
   function authenticateUser() {
     if (checkIsValidInput()) {
       let isAlreadyHaveAcc = localStorage.getItem(emailOrUserName);
-      if (!isAlreadyHaveAcc) {
-        localStorage.setItem(
-          emailOrUserName,
-          JSON.stringify({
-            userName: emailOrUserName,
-            password: password,
-          })
-        );
-
+      if (isAlreadyHaveAcc) {
+             setHaveAccount(true);
         navigate("/");
       } else {
-        setAlreadyHaveAcc(true);
+        setHaveAccount(false);
       }
     }
   }
 
   return (
-    <CardComponent className="signUpCard" footerRenderer={<FooterRenderer />}>
-      <div className="signUpheader">
-        <span className="title">Create an account to continue</span>
+    <CardComponent className="signInCard" footerRenderer={<FooterRenderer />}>
+      <div className="signInheader">
+        <span className="title">Sign in to continue</span>
         <span className="helpText">
-          Create an account to access all the features on this app
+          Sign in to access all the feature of this app
         </span>
       </div>
 
@@ -146,22 +118,22 @@ export function SignUpComponent() {
           setEmailOrUserName(value);
           if (validateEmail(value)) {
             dispatchError({
-              type: SIGNUP_FIELDS.EMAIL,
+              type: SIGNIN_FIELDS.EMAIL,
               value: {
-                ...defaultErrorState[SIGNUP_FIELDS.EMAIL],
+                ...defaultErrorState[SIGNIN_FIELDS.EMAIL],
               },
             });
           } else {
             dispatchError({
-              type: SIGNUP_FIELDS.EMAIL,
+              type: SIGNIN_FIELDS.EMAIL,
               value: { isError: true, errorMsg: ERROR_MESSAGE.EMAIL },
             });
           }
         }}
         label="Email or username"
         value={emailOrUserName}
-        showError={errorMessages[SIGNUP_FIELDS.EMAIL].isError}
-        errorMessage={errorMessages[SIGNUP_FIELDS.EMAIL].errorMsg}
+        showError={errorMessages[SIGNIN_FIELDS.EMAIL].isError}
+        errorMessage={errorMessages[SIGNIN_FIELDS.EMAIL].errorMsg}
         placeholder="Enter email or username here"
       />
       <InputFieldComponent
@@ -170,55 +142,31 @@ export function SignUpComponent() {
           setPassword(value);
           if (isValidPassword(value)) {
             dispatchError({
-              type: SIGNUP_FIELDS.PASSWORD,
+              type: SIGNIN_FIELDS.PASSWORD,
               value: {
-                ...defaultErrorState[SIGNUP_FIELDS.PASSWORD],
+                ...defaultErrorState[SIGNIN_FIELDS.PASSWORD],
               },
             });
           } else {
             dispatchError({
-              type: SIGNUP_FIELDS.PASSWORD,
+              type: SIGNIN_FIELDS.PASSWORD,
               value: { isError: true, errorMsg: ERROR_MESSAGE.PASSWORD },
             });
           }
         }}
         label="Password"
         value={password}
-        showError={errorMessages[SIGNUP_FIELDS.PASSWORD].isError}
-        errorMessage={errorMessages[SIGNUP_FIELDS.PASSWORD].errorMsg}
+        showError={errorMessages[SIGNIN_FIELDS.PASSWORD].isError}
+        errorMessage={errorMessages[SIGNIN_FIELDS.PASSWORD].errorMsg}
         placeholder="Enter password here"
       />
-      <InputFieldComponent
-        onChange={(e) => {
-          let value = e.target.value;
-          setReenteredPassword(value);
-          if (value.trim() !== "" && password === value) {
-            dispatchError({
-              type: SIGNUP_FIELDS.REPEAT_PASSWORD,
-              value: {
-                ...defaultErrorState[SIGNUP_FIELDS.REPEAT_PASSWORD],
-              },
-            });
-          } else {
-            dispatchError({
-              type: SIGNUP_FIELDS.REPEAT_PASSWORD,
-              value: { isError: true, errorMsg: ERROR_MESSAGE.REPEAT_PASSWORD },
-            });
-          }
-        }}
-        label="Repeat password"
-        value={reenteredPassword}
-        showError={errorMessages[SIGNUP_FIELDS.REPEAT_PASSWORD].isError}
-        errorMessage={errorMessages[SIGNUP_FIELDS.REPEAT_PASSWORD].errorMsg}
-        placeholder="Repeat password here"
-      />
       <ButtonComponent
-        className="submitInSignUp"
+        className="submitInSignIn"
         onClick={() => authenticateUser()}
-        label={"Sign up"}
+        label={"Sign in"}
       />
-      {alreadyHaveAcc ? (
-        <span className="errorText"> Alreasy this mail have account</span>
+      {!haveAccount ? (
+        <span className="errorText"> You dont have account</span>
       ) : null}
     </CardComponent>
   );
@@ -227,12 +175,12 @@ export function SignUpComponent() {
 function FooterRenderer() {
   const navigate = useNavigate();
   return (
-    <div className="signUpFooter">
-      <span className="footerText"> Alreasy have an account ?</span>
+    <div className="signInFooter">
+      <span className="footerText"> Do not have account ?</span>
       <LinkComponent
-        className="signInLink"
-        label={"Sign In"}
-        onClick={() => navigate("/signin")}
+        className="signUpLink"
+        label={"Sign up"}
+        onClick={() => navigate("/signup")}
       />
     </div>
   );
