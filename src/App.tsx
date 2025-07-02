@@ -2,7 +2,7 @@ import React, {ReactElement, useContext} from "react";
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SignInPage, SignUpPage, FeedPage } from './pages';
-import { AuthContext, AuthProvider, useAuth } from './context/AuthContext';
+import { AuthContext, AuthProvider } from './context/AuthContext';
 
 
 interface PrivateRouteProps {
