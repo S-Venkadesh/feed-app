@@ -1,8 +1,8 @@
-import React, {ReactElement} from "react";
+import React, {ReactElement, useContext} from "react";
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SignInPage, SignUpPage, FeedPage } from './pages';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthContext, AuthProvider, useAuth } from './context/AuthContext';
 
 
 interface PrivateRouteProps {
@@ -11,7 +11,7 @@ interface PrivateRouteProps {
 
 
 function PrivateRoute({ children }: PrivateRouteProps) {
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
   return user ? children : <Navigate to="/signin" />;
 }
 
