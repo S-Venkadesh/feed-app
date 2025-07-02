@@ -1,35 +1,16 @@
-import React, { useState, useReducer, useContext } from "react";
+import React, { useState, useReducer } from "react";
 import { CardComponent } from "../../widgets/card";
 import { InputFieldComponent } from "../../widgets/inputfield";
 import { ButtonComponent } from "../../widgets/Button";
 import { LinkComponent } from "../../widgets/link";
-
 import { useNavigate } from "react-router-dom";
 
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
-import {  useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
-const SIGNIN_FIELDS = {
-  EMAIL: "email",
-  PASSWORD: "password",
-};
-
-const ERROR_MESSAGE = {
-  EMAIL: "Enter valid email or user name",
-  PASSWORD: "Password lengtth should greater than 6",
-};
-
-const defaultErrorState = {
-  [SIGNIN_FIELDS.EMAIL]: {
-    isError: false,
-    errorMsg: "",
-  },
-  [SIGNIN_FIELDS.PASSWORD]: {
-    isError: false,
-    errorMsg: "",
-  },
-};
+// Types
+type FieldKey = "email" | "password";
 
 type FieldState = {
   isError: boolean;
@@ -41,46 +22,52 @@ type SignInState = {
   password: FieldState;
 };
 
-type Action = {
-  type: string;
-  value?: FieldState;
+type Action =
+  | { type: FieldKey; value: FieldState }
+  | { type: "reset" };
+
+// Constants
+const SIGNIN_FIELDS = {
+  EMAIL: "email",
+  PASSWORD: "password",
+} as const;
+
+const ERROR_MESSAGE = {
+  EMAIL: "Enter valid email or user name",
+  PASSWORD: "Password length should be greater than 6",
 };
 
-function reducer(state: SignInState, action: Action) {
+// Initial State
+const defaultErrorState: SignInState = {
+  email: { isError: false, errorMsg: "" },
+  password: { isError: false, errorMsg: "" },
+};
+
+// Reducer
+function reducer(state: SignInState, action: Action): SignInState {
   switch (action.type) {
-    case SIGNIN_FIELDS.EMAIL:
+    case "email":
+    case "password":
       return {
         ...state,
-        [SIGNIN_FIELDS.EMAIL]: {
-          ...action.value,
-        },
-      };
-    case SIGNIN_FIELDS.PASSWORD:
-      return {
-        ...state,
-        [SIGNIN_FIELDS.PASSWORD]: {
-          ...action.value,
-        },
+        [action.type]: action.value,
       };
     case "reset":
       return { ...defaultErrorState };
     default:
-      return { ...defaultErrorState };
+      return state;
   }
 }
 
 export function SignInComponent() {
   const navigate = useNavigate();
-
-     const {login} = useAuth();
+  const { login } = useAuth();
 
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
   const [haveAccount, setHaveAccount] = useState(true);
 
-  const [errorMessages, dispatchError] = useReducer(reducer, {
-    ...defaultErrorState,
-  });
+  const [errorMessages, dispatchError] = useReducer(reducer, defaultErrorState);
 
   function checkIsValidInput() {
     let isValid = true;
@@ -88,43 +75,33 @@ export function SignInComponent() {
     if (emailOrUserName.trim() === "") {
       isValid = false;
       dispatchError({
-        type: SIGNIN_FIELDS.EMAIL,
+        type: "email",
         value: { isError: true, errorMsg: ERROR_MESSAGE.EMAIL },
       });
     }
 
-    if (password.trim().split("").length < 6) {
+    if (password.trim().length < 6) {
       isValid = false;
       dispatchError({
-        type: SIGNIN_FIELDS.PASSWORD,
+        type: "password",
         value: { isError: true, errorMsg: ERROR_MESSAGE.PASSWORD },
       });
     }
 
     if (isValid) {
-      dispatchError({type: "reset"});
+      dispatchError({ type: "reset" });
     }
 
     return isValid;
   }
 
-  function checkUserHaveAcc(user){
-    console.log(user, "user",emailOrUserName, user.userName === emailOrUserName)
-    if(user.userName ===emailOrUserName && user.password === password){
-      return true
-    }else {
-      return false
-    }
-  }
-
   function authenticateUser() {
     if (checkIsValidInput()) {
-
-      let userLogedInSuccessfully = login({userName: emailOrUserName, password: password})
-      if(userLogedInSuccessfully){
+      const success = login({ userName: emailOrUserName, password });
+      if (success) {
         navigate("/");
-      }else {
-        setHaveAccount(false)
+      } else {
+        setHaveAccount(false);
       }
     }
   }
@@ -134,66 +111,55 @@ export function SignInComponent() {
       <div className="signInheader">
         <span className="title">Sign in to continue</span>
         <span className="helpText">
-          Sign in to access all the feature of this app
+          Sign in to access all the features of this app
         </span>
       </div>
 
       <InputFieldComponent
         onChange={(e) => {
-          let value = e.target.value;
+          const value = e.target.value;
           setEmailOrUserName(value);
-          if (validateEmail(value)) {
-            dispatchError({
-              type: SIGNIN_FIELDS.EMAIL,
-              value: {
-                ...defaultErrorState[SIGNIN_FIELDS.EMAIL],
-              },
-            });
-          } else {
-            dispatchError({
-              type: SIGNIN_FIELDS.EMAIL,
-              value: { isError: true, errorMsg: ERROR_MESSAGE.EMAIL },
-            });
-          }
+          dispatchError({
+            type: "email",
+            value: validateEmail(value)
+              ? defaultErrorState.email
+              : { isError: true, errorMsg: ERROR_MESSAGE.EMAIL },
+          });
         }}
         label="Email or username"
         value={emailOrUserName}
-        showError={errorMessages[SIGNIN_FIELDS.EMAIL].isError}
-        errorMessage={errorMessages[SIGNIN_FIELDS.EMAIL].errorMsg}
+        showError={errorMessages.email.isError}
+        errorMessage={errorMessages.email.errorMsg}
         placeholder="Enter email or username here"
       />
+
       <InputFieldComponent
         onChange={(e) => {
-          let value = e.target.value;
+          const value = e.target.value;
           setPassword(value);
-          if (isValidPassword(value)) {
-            dispatchError({
-              type: SIGNIN_FIELDS.PASSWORD,
-              value: {
-                ...defaultErrorState[SIGNIN_FIELDS.PASSWORD],
-              },
-            });
-          } else {
-            dispatchError({
-              type: SIGNIN_FIELDS.PASSWORD,
-              value: { isError: true, errorMsg: ERROR_MESSAGE.PASSWORD },
-            });
-          }
+          dispatchError({
+            type: "password",
+            value: isValidPassword(value)
+              ? defaultErrorState.password
+              : { isError: true, errorMsg: ERROR_MESSAGE.PASSWORD },
+          });
         }}
         label="Password"
         value={password}
-        showError={errorMessages[SIGNIN_FIELDS.PASSWORD].isError}
-        errorMessage={errorMessages[SIGNIN_FIELDS.PASSWORD].errorMsg}
+        showError={errorMessages.password.isError}
+        errorMessage={errorMessages.password.errorMsg}
         placeholder="Enter password here"
       />
+
       <ButtonComponent
         className="submitInSignIn"
-        onClick={() => authenticateUser()}
-        label={"Sign in"}
+        onClick={authenticateUser}
+        label="Sign in"
       />
-      {!haveAccount ? (
-        <span className="errorText"> Something wrong put correct details</span>
-      ) : null}
+
+      {!haveAccount && (
+        <span className="errorText">Invalid credentials. Please try again.</span>
+      )}
     </CardComponent>
   );
 }
@@ -202,10 +168,10 @@ function FooterRenderer() {
   const navigate = useNavigate();
   return (
     <div className="signInFooter">
-      <span className="footerText"> Do not have account ?</span>
+      <span className="footerText">Don't have an account?</span>
       <LinkComponent
         className="signUpLink"
-        label={"Sign up"}
+        label="Sign up"
         onClick={() => navigate("/signup")}
       />
     </div>
