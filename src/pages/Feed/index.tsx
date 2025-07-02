@@ -6,7 +6,7 @@ import { RichTextComponent } from "../../widgets/richtext";
 import { FeedBox } from "../../components/feedbox";
 import { SignInComponent } from "../../components/signin";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import {  useAuth } from "../../context/AuthContext";
 
 const MOCK_FEEDS = [
   {
@@ -28,7 +28,7 @@ const MOCK_FEEDS = [
 export function FeedPage() {
   const naviagate = useNavigate();
 
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const feedContainerRef = useRef<HTMLDivElement | null>(null);
 

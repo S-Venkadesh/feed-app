@@ -2,14 +2,13 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { mockUsers } from "../data/users"; // ✅ Make sure this exists
 
 interface AuthContextType {
-  user: string | null;
-  authenticated: boolean | null,
+ user: userDetails | null;
   login: (email: string, password: string) => boolean;
   logout: () => void;
   signUp: (userName: string, password: string) => boolean;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -21,9 +20,10 @@ interface userDetails {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<string | null>(
-    JSON.parse(localStorage.getItem("authUser")) || null
-  );
+const [user, setUser] = useState<userDetails | null>(() => {
+  const stored = localStorage.getItem("authUser");
+  return stored ? JSON.parse(stored) : null;
+});
 
   const login = (loginDetails: any): boolean => {
     let userDetails = localStorage.getItem("authUser");
@@ -55,4 +55,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };

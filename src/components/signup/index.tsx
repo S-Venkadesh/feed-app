@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const SIGNUP_FIELDS = {
   EMAIL: "email",
@@ -70,7 +70,7 @@ function reducer(state, action) {
 export function SignUpComponent() {
   const navigate = useNavigate();
 
-   const {signUp} = useContext(AuthContext);
+   const {signUp} = useAuth();
 
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");

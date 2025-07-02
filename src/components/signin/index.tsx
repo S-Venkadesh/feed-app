@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
-import { AuthContext } from "../../context/AuthContext";
+import {  useAuth } from "../../context/AuthContext";
 
 const SIGNIN_FIELDS = {
   EMAIL: "email",
@@ -57,7 +57,7 @@ function reducer(state, action) {
 export function SignInComponent() {
   const navigate = useNavigate();
 
-     const {login} = useContext(AuthContext);
+     const {login} = useAuth();
 
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
