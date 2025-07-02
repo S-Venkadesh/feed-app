@@ -18,6 +18,11 @@ interface userDetails {
   password: string;
 }
 
+const MOCK_USERS: userDetails[] = [
+  { userName: "demo@example.com", password: "password123" },
+  { userName: "test@user.com", password: "testpass" },
+];
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 const [user, setUser] = useState<userDetails | null>(() => {
   const stored = localStorage.getItem("authUser");
@@ -27,11 +32,12 @@ const [user, setUser] = useState<userDetails | null>(() => {
   const login = (loginDetails: userDetails): boolean => {
   const user = JSON.parse(localStorage.getItem("authUser") || 'null');
 
-    if (user !== null &&
+    if ((user !== null &&
       user.userName === loginDetails.userName &&
-      user.password === loginDetails.password
+      user.password === loginDetails.password )||
+      (MOCK_USERS.find(u => u.userName === loginDetails.userName && u.password === loginDetails.password))
     ) {
-      setUser(user);
+      setUser(loginDetails);
       return true;
     } else {
       return false;
