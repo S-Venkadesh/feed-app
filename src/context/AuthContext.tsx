@@ -1,10 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface AuthContextType {
  user: userDetails | null;
-  login: (email: string, password: string) => boolean;
+  login: (userDetails) => boolean;
   logout: () => void;
-  signUp: (userName: string, password: string) => boolean;
+  signUp: (userDetails) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,7 +24,7 @@ const [user, setUser] = useState<userDetails | null>(() => {
   return stored ? JSON.parse(stored) : null;
 });
 
-  const login = (loginDetails: any): boolean => {
+  const login = (loginDetails: userDetails): boolean => {
   const user = JSON.parse(localStorage.getItem("authUser") || 'null');
 
     if (user !== null &&

@@ -11,14 +11,12 @@ const MOCK_FEEDS = [
   {
     id: "001",
     name: "Theresa webb",
-    time: "5 mins ago",
     message:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s ",
   },
   {
     id: "002",
     name: "John deo",
-    time: "5 mins ago",
     message:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s ",
   },

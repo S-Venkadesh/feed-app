@@ -19,7 +19,7 @@ import Tooltip from "../Tooltip";
 
 interface richtextProps {
   value: string;
-  onPublish: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onPublish: () => void;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
@@ -28,6 +28,16 @@ export function RichTextComponent({
   onPublish,
   onChange,
 }: richtextProps) {
+
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onPublish()
+      console.log('Enter pressed');
+    }
+  };
+
   return (
     <CardComponent className="feedRichText" footerRenderer={<div></div>}>
       <div className="richtextWrapper">
@@ -39,6 +49,7 @@ export function RichTextComponent({
             className="richtextInputField"
             value={value}
             onChange={onChange}
+            onKeyDown={handleKeyDown}
             placeholder="Enter text here...."
           />
         </section>
