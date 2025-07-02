@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import { CardComponent } from "../../widgets/card";
 import { InputFieldComponent } from "../../widgets/inputfield";
 import { ButtonComponent } from "../../widgets/Button";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
+import { AuthContext } from "../../context/AuthContext";
 
 const SIGNUP_FIELDS = {
   EMAIL: "email",
@@ -69,6 +70,8 @@ function reducer(state, action) {
 export function SignUpComponent() {
   const navigate = useNavigate();
 
+   const {signUp} = useContext(AuthContext);
+
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
   const [reenteredPassword, setReenteredPassword] = useState("");
@@ -111,20 +114,18 @@ export function SignUpComponent() {
 
     return isValid;
   }
+  
 
   function authenticateUser() {
     if (checkIsValidInput()) {
+
       let isAlreadyHaveAcc = localStorage.getItem(emailOrUserName);
       if (!isAlreadyHaveAcc) {
-        localStorage.setItem(
-          emailOrUserName,
-          JSON.stringify({
+        signUp({
             userName: emailOrUserName,
             password: password,
-          })
-        );
-
-        navigate("/");
+          });
+        navigate("/signin");
       } else {
         setAlreadyHaveAcc(true);
       }

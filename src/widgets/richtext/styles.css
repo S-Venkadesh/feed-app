@@ -137,3 +137,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.sendButton {
+  background-color: none;
+  border: none
+}

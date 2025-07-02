@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import { CardComponent } from "../../widgets/card";
 import { InputFieldComponent } from "../../widgets/inputfield";
 import { ButtonComponent } from "../../widgets/Button";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
+import { AuthContext } from "../../context/AuthContext";
 
 const SIGNIN_FIELDS = {
   EMAIL: "email",
@@ -56,9 +57,10 @@ function reducer(state, action) {
 export function SignInComponent() {
   const navigate = useNavigate();
 
+     const {login} = useContext(AuthContext);
+
   const [emailOrUserName, setEmailOrUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [reenteredPassword, setReenteredPassword] = useState("");
   const [haveAccount, setHaveAccount] = useState(true);
 
   const [errorMessages, dispatchError] = useReducer(reducer, {
@@ -91,14 +93,23 @@ export function SignInComponent() {
     return isValid;
   }
 
+  function checkUserHaveAcc(user){
+    console.log(user, "user",emailOrUserName, user.userName === emailOrUserName)
+    if(user.userName ===emailOrUserName && user.password === password){
+      return true
+    }else {
+      return false
+    }
+  }
+
   function authenticateUser() {
     if (checkIsValidInput()) {
-      let isAlreadyHaveAcc = localStorage.getItem(emailOrUserName);
-      if (isAlreadyHaveAcc) {
-             setHaveAccount(true);
+
+      let userLogedInSuccessfully = login({userName: emailOrUserName, password: password})
+      if(userLogedInSuccessfully){
         navigate("/");
-      } else {
-        setHaveAccount(false);
+      }else {
+        setHaveAccount(false)
       }
     }
   }
@@ -166,7 +177,7 @@ export function SignInComponent() {
         label={"Sign in"}
       />
       {!haveAccount ? (
-        <span className="errorText"> You dont have account</span>
+        <span className="errorText"> Something wrong put correct details</span>
       ) : null}
     </CardComponent>
   );
