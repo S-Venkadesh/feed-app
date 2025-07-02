@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { CardComponent } from "../../widgets/card";
+import React, { useState, useEffect, useRef } from "react";
 
 import "./styles.css";
 import { RichTextComponent } from "../../widgets/richtext";

@@ -31,7 +31,22 @@ const defaultErrorState = {
   },
 };
 
-function reducer(state, action) {
+type FieldState = {
+  isError: boolean;
+  errorMsg: string;
+};
+
+type SignInState = {
+  email: FieldState;
+  password: FieldState;
+};
+
+type Action = {
+  type: string;
+  value?: FieldState;
+};
+
+function reducer(state: SignInState, action: Action) {
   switch (action.type) {
     case SIGNIN_FIELDS.EMAIL:
       return {
@@ -87,7 +102,7 @@ export function SignInComponent() {
     }
 
     if (isValid) {
-      dispatchError("reset");
+      dispatchError({type: "reset"});
     }
 
     return isValid;

@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
-import { mockUsers } from "../data/users"; // ✅ Make sure this exists
 
 interface AuthContextType {
  user: userDetails | null;
@@ -26,8 +25,7 @@ const [user, setUser] = useState<userDetails | null>(() => {
 });
 
   const login = (loginDetails: any): boolean => {
-    let userDetails = localStorage.getItem("authUser");
-    const user = JSON.parse(userDetails);
+  const user = JSON.parse(localStorage.getItem("authUser") || 'null');
 
     if (user !== null &&
       user.userName === loginDetails.userName &&
