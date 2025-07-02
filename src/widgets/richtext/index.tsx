@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
   faBold,
-  faFaceSmile,
   faItalic,
   faMicrophoneSlash,
   faPaperPlane,
@@ -14,6 +13,7 @@ import {
   faUnderline,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSmileBeam } from "@fortawesome/free-regular-svg-icons";
 import { CardComponent } from "../card";
 import Tooltip from "../Tooltip";
 
@@ -44,7 +44,7 @@ export function RichTextComponent({
         <RichtextHeader />
 
         <section className="richTextInputSection">
-          <FontAwesomeIcon className="smileIcon" icon={faFaceSmile} />
+          <FontAwesomeIcon className="smileIcon" icon={faFaceSmileBeam} />
           <textarea
             className="richtextInputField"
             value={value}
