@@ -49,10 +49,7 @@ function reducer(state: SignInState, action: Action): SignInState {
         [action.type]: action.value,
       };
     case "reset":
-      return {
-        email: { isError: false, errorMsg: "" },
-        password: { isError: false, errorMsg: "" },
-      };
+      return defaultErrorState;
     default:
       return state;
   }
