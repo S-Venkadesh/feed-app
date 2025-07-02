@@ -1,0 +1,39 @@
+.header {
+  flex: 0 0 auto;
+  font-weight: bold;
+  font-size: medium;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline-start: 35px;
+  padding-inline-end: 23px;
+  padding-block: 26px;
+}
+
+.loginText {
+  font-weight: 500;
+  font-size: small;
+}
+
+.feedWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentSection {
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.feedSection {
+  display: flex;
+  max-width: 500px;
+  row-gap: 23px;
+  flex-direction: column;
+}
+
+

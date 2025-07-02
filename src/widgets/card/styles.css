@@ -3,7 +3,7 @@
   height: auto;
   --card-outer-padding: 9px;
   --card-outer-border-radius: 24px;
-  background-color: #eaeaea;
+  background-color: #f7f7f7;
   padding: var(--card-outer-padding);
   border-radius: var(--card-outer-border-radius);
 }

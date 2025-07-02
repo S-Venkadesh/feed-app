@@ -1,0 +1,139 @@
+.richtextWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.richTextHeader {
+  margin: 6px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.richtextFooter {
+  flex: 0 0 auto;
+  margin: 6px;
+  display: flex;
+  border-top: 1px solid #dedede;
+  padding: 8px;
+  justify-content: space-between;
+}
+
+.icon {
+  height: 6px;
+  width: 6px;
+}
+
+.richtextActions {
+  background-color: #f7f7f7;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+}
+
+.bold {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  margin-inline-start: 21px;
+}
+
+.actionSection {
+  padding: 4px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 4px;
+  height: 16px;
+}
+
+.para {
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  font-size: x-small;
+  column-gap: 8px;
+}
+
+.Italic,
+.underline,
+.deleteIcon {
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteIcon {
+  margin: 4px;
+  padding: 4px;
+  background-color: #ffd9d9;
+  fill: red;
+  border-radius: 4px;
+}
+
+.fontIcon,
+.footerIcon {
+  height: 10px;
+  width: 10px;
+}
+
+.divider {
+  margin-inline: 4px;
+  height: 16px;
+  width: 1px;
+  background-color: #dedede;
+}
+
+.richTextInputSection {
+  flex: 0 0 100px;
+  margin: 6px;
+  display: flex;
+  column-gap: 8px;
+}
+
+.smileIcon {
+  margin-top: 8px;
+}
+
+.richtextInputField {
+  border: none;
+  height: auto;
+  width: 100%;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.richtextInputField:focus-visible {
+  outline: none;
+  border: none;
+}
+
+.sendOptions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 12px;
+}
+
+.sendIcon > path,
+.sendIcon {
+  fill: #5056e9;
+}
+
+.feedRichText {
+  border: 1px solid #dedede;
+}
+
+.plusIconWrapper {
+  border-radius: 4px;
+  height: 22px;
+  width: 22px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
