@@ -9,7 +9,6 @@ import "./styles.css";
 import { isValidPassword, validateEmail } from "../../utils";
 import { useAuth } from "../../context/AuthContext";
 
-// Types
 type FieldKey = "email" | "password";
 
 type FieldState = {
@@ -26,7 +25,6 @@ type Action =
   | { type: FieldKey; value: FieldState }
   | { type: "reset" };
 
-// Constants
 const SIGNIN_FIELDS = {
   EMAIL: "email",
   PASSWORD: "password",
@@ -37,13 +35,11 @@ const ERROR_MESSAGE = {
   PASSWORD: "Password length should be greater than 6",
 };
 
-// Initial State
 const defaultErrorState: SignInState = {
   email: { isError: false, errorMsg: "" },
   password: { isError: false, errorMsg: "" },
 };
 
-// Reducer
 function reducer(state: SignInState, action: Action): SignInState {
   switch (action.type) {
     case "email":
@@ -53,7 +49,10 @@ function reducer(state: SignInState, action: Action): SignInState {
         [action.type]: action.value,
       };
     case "reset":
-      return { ...defaultErrorState };
+      return {
+        email: { isError: false, errorMsg: "" },
+        password: { isError: false, errorMsg: "" },
+      };
     default:
       return state;
   }
